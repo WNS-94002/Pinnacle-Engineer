@@ -1,0 +1,1294 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Sales Dashboard</title>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.min.js"></script>
+<link href="https://fonts.googleapis.com/css2?family=Sarabun:wght@300;400;500;600;700&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
+<style>
+
+  /* ===== LOGIN PAGE ===== */
+  #login-page {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    min-height: 100vh;
+    position: relative;
+    z-index: 10;
+  }
+
+  .login-box {
+    background: #111827;
+    border: 1px solid #1e3a5f;
+    border-radius: 24px;
+    padding: 48px 44px;
+    width: 100%;
+    max-width: 420px;
+    position: relative;
+    overflow: hidden;
+    animation: fadeInUp 0.6s ease forwards;
+  }
+
+  .login-box::before {
+    content: '';
+    position: absolute;
+    top: -60px; left: -60px;
+    width: 180px; height: 180px;
+    background: radial-gradient(circle, rgba(0,212,255,0.12), transparent 70%);
+    pointer-events: none;
+  }
+
+  .login-box::after {
+    content: '';
+    position: absolute;
+    bottom: -60px; right: -40px;
+    width: 160px; height: 160px;
+    background: radial-gradient(circle, rgba(124,58,237,0.12), transparent 70%);
+    pointer-events: none;
+  }
+
+  .login-logo {
+    text-align: center;
+    margin-bottom: 32px;
+  }
+
+  .login-logo-icon {
+    width: 56px; height: 56px;
+    background: linear-gradient(135deg, #00d4ff, #7c3aed);
+    border-radius: 16px;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 26px;
+    margin: 0 auto 14px;
+    box-shadow: 0 8px 32px rgba(0,212,255,0.2);
+  }
+
+  .login-title {
+    font-family: 'Space Mono', monospace;
+    font-size: 1.5rem;
+    color: #00d4ff;
+    letter-spacing: -0.5px;
+  }
+
+  .login-title span { color: #e2e8f0; }
+
+  .login-subtitle {
+    font-size: 0.82rem;
+    color: #64748b;
+    margin-top: 4px;
+  }
+
+  .login-field {
+    margin-bottom: 18px;
+  }
+
+  .login-field label {
+    display: block;
+    font-size: 0.8rem;
+    color: #94a3b8;
+    margin-bottom: 7px;
+    letter-spacing: 0.5px;
+  }
+
+  .login-input-wrap {
+    position: relative;
+  }
+
+  .login-input-wrap .field-icon {
+    position: absolute;
+    left: 14px; top: 50%;
+    transform: translateY(-50%);
+    font-size: 1rem;
+    color: #475569;
+    pointer-events: none;
+  }
+
+  .login-field input {
+    width: 100%;
+    background: #1a2235;
+    border: 1px solid #1e3a5f;
+    border-radius: 10px;
+    padding: 12px 14px 12px 40px;
+    color: #e2e8f0;
+    font-family: 'Sarabun', sans-serif;
+    font-size: 0.95rem;
+    outline: none;
+    transition: border-color 0.2s, box-shadow 0.2s;
+  }
+
+  .login-field input:focus {
+    border-color: #00d4ff;
+    box-shadow: 0 0 0 3px rgba(0,212,255,0.1);
+  }
+
+  .toggle-pass {
+    position: absolute;
+    right: 12px; top: 50%;
+    transform: translateY(-50%);
+    background: none;
+    border: none;
+    color: #475569;
+    cursor: pointer;
+    font-size: 1rem;
+    padding: 4px;
+    transition: color 0.2s;
+  }
+
+  .toggle-pass:hover { color: #94a3b8; }
+
+  .login-error {
+    display: none;
+    align-items: center;
+    gap: 8px;
+    background: rgba(239,68,68,0.1);
+    border: 1px solid rgba(239,68,68,0.3);
+    border-radius: 8px;
+    padding: 10px 14px;
+    font-size: 0.82rem;
+    color: #f87171;
+    margin-bottom: 18px;
+  }
+
+  .login-error.show { display: flex; }
+
+  .login-btn {
+    width: 100%;
+    background: linear-gradient(135deg, #00d4ff, #7c3aed);
+    border: none;
+    border-radius: 10px;
+    padding: 13px;
+    color: #fff;
+    font-family: 'Sarabun', sans-serif;
+    font-size: 1rem;
+    font-weight: 700;
+    cursor: pointer;
+    transition: opacity 0.2s, transform 0.2s;
+    position: relative;
+    overflow: hidden;
+    margin-top: 4px;
+  }
+
+  .login-btn:hover { opacity: 0.92; transform: translateY(-1px); }
+  .login-btn:active { transform: translateY(0); }
+
+  .login-btn.loading { pointer-events: none; opacity: 0.7; }
+
+  .login-footer {
+    text-align: center;
+    margin-top: 24px;
+    font-size: 0.75rem;
+    color: #475569;
+  }
+
+  /* shake animation for wrong pass */
+  @keyframes shake {
+    0%,100%{transform:translateX(0)}
+    20%{transform:translateX(-8px)}
+    40%{transform:translateX(8px)}
+    60%{transform:translateX(-6px)}
+    80%{transform:translateX(6px)}
+  }
+  .shake { animation: shake 0.4s ease; }
+
+  /* ===== DASHBOARD HIDDEN BY DEFAULT ===== */
+  #dashboard-page { display: none; }
+
+</style><style>
+  :root {
+    --bg: #0a0e1a;
+    --surface: #111827;
+    --surface2: #1a2235;
+    --border: #1e3a5f;
+    --accent: #00d4ff;
+    --accent2: #7c3aed;
+    --accent3: #10b981;
+    --danger: #ef4444;
+    --text: #e2e8f0;
+    --muted: #64748b;
+    --gold: #f59e0b;
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  body {
+    font-family: 'Sarabun', sans-serif;
+    background: var(--bg);
+    color: var(--text);
+    min-height: 100vh;
+    overflow-x: hidden;
+  }
+
+  /* Background grid */
+  body::before {
+    content: '';
+    position: fixed;
+    inset: 0;
+    background-image:
+      linear-gradient(rgba(0,212,255,0.03) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(0,212,255,0.03) 1px, transparent 1px);
+    background-size: 40px 40px;
+    pointer-events: none;
+    z-index: 0;
+  }
+
+  .container {
+    position: relative;
+    z-index: 1;
+    max-width: 1400px;
+    margin: 0 auto;
+    padding: 24px;
+  }
+
+  /* Header */
+  header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 32px;
+    padding-bottom: 20px;
+    border-bottom: 1px solid var(--border);
+  }
+
+  .logo {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+  }
+
+  .logo-icon {
+    width: 40px; height: 40px;
+    background: linear-gradient(135deg, var(--accent), var(--accent2));
+    border-radius: 10px;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 20px;
+  }
+
+  h1 {
+    font-family: 'Space Mono', monospace;
+    font-size: 1.4rem;
+    color: var(--accent);
+    letter-spacing: -0.5px;
+  }
+
+  h1 span { color: var(--text); }
+
+  .header-right {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+  }
+
+  .data-source-badge {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    background: var(--surface2);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 8px 16px;
+    font-size: 0.8rem;
+    color: var(--muted);
+    cursor: pointer;
+    transition: all 0.2s;
+  }
+
+  .data-source-badge:hover { border-color: var(--accent); color: var(--accent); }
+
+  .dot {
+    width: 8px; height: 8px;
+    border-radius: 50%;
+    background: var(--accent3);
+    animation: pulse 2s infinite;
+  }
+
+  @keyframes pulse {
+    0%,100% { opacity: 1; transform: scale(1); }
+    50% { opacity: 0.5; transform: scale(0.8); }
+  }
+
+  .date-filter {
+    display: flex;
+    gap: 4px;
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 4px;
+  }
+
+  .filter-btn {
+    padding: 6px 14px;
+    border: none;
+    border-radius: 6px;
+    background: transparent;
+    color: var(--muted);
+    font-family: 'Sarabun', sans-serif;
+    font-size: 0.85rem;
+    cursor: pointer;
+    transition: all 0.2s;
+  }
+
+  .filter-btn.active {
+    background: var(--accent);
+    color: #000;
+    font-weight: 600;
+  }
+
+  /* KPI Cards */
+  .kpi-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 16px;
+    margin-bottom: 24px;
+  }
+
+  .kpi-card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 16px;
+    padding: 20px 24px;
+    position: relative;
+    overflow: hidden;
+    transition: transform 0.2s, border-color 0.2s;
+    animation: fadeInUp 0.5s ease forwards;
+    opacity: 0;
+  }
+
+  .kpi-card:nth-child(1) { animation-delay: 0.1s; }
+  .kpi-card:nth-child(2) { animation-delay: 0.2s; }
+  .kpi-card:nth-child(3) { animation-delay: 0.3s; }
+  .kpi-card:nth-child(4) { animation-delay: 0.4s; }
+
+  @keyframes fadeInUp {
+    from { opacity: 0; transform: translateY(20px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+
+  .kpi-card:hover { transform: translateY(-3px); border-color: var(--accent); }
+
+  .kpi-card::before {
+    content: '';
+    position: absolute;
+    top: 0; left: 0; right: 0;
+    height: 3px;
+  }
+
+  .kpi-card.blue::before { background: linear-gradient(90deg, var(--accent), var(--accent2)); }
+  .kpi-card.green::before { background: linear-gradient(90deg, var(--accent3), #059669); }
+  .kpi-card.purple::before { background: linear-gradient(90deg, var(--accent2), #9333ea); }
+  .kpi-card.gold::before { background: linear-gradient(90deg, var(--gold), #d97706); }
+
+  .kpi-label {
+    font-size: 0.8rem;
+    color: var(--muted);
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    margin-bottom: 8px;
+  }
+
+  .kpi-value {
+    font-family: 'Space Mono', monospace;
+    font-size: 1.8rem;
+    font-weight: 700;
+    color: var(--text);
+    margin-bottom: 8px;
+  }
+
+  .kpi-change {
+    font-size: 0.8rem;
+    display: flex;
+    align-items: center;
+    gap: 4px;
+  }
+
+  .kpi-change.up { color: var(--accent3); }
+  .kpi-change.down { color: var(--danger); }
+
+  .kpi-icon {
+    position: absolute;
+    top: 20px; right: 20px;
+    font-size: 1.8rem;
+    opacity: 0.15;
+  }
+
+  /* Charts Grid */
+  .charts-grid {
+    display: grid;
+    grid-template-columns: 2fr 1fr;
+    gap: 16px;
+    margin-bottom: 24px;
+  }
+
+  .chart-card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 16px;
+    padding: 24px;
+    animation: fadeInUp 0.5s ease 0.5s forwards;
+    opacity: 0;
+  }
+
+  .chart-card:nth-child(2) { animation-delay: 0.6s; }
+
+  .chart-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 20px;
+  }
+
+  .chart-title {
+    font-size: 1rem;
+    font-weight: 600;
+    color: var(--text);
+  }
+
+  .chart-subtitle {
+    font-size: 0.75rem;
+    color: var(--muted);
+    margin-top: 2px;
+  }
+
+  .legend {
+    display: flex;
+    gap: 16px;
+  }
+
+  .legend-item {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    font-size: 0.78rem;
+    color: var(--muted);
+  }
+
+  .legend-dot { width: 8px; height: 8px; border-radius: 50%; }
+
+  canvas { max-height: 280px; }
+
+  /* Table */
+  .table-card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 16px;
+    overflow: hidden;
+    animation: fadeInUp 0.5s ease 0.7s forwards;
+    opacity: 0;
+  }
+
+  .table-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 20px 24px;
+    border-bottom: 1px solid var(--border);
+  }
+
+  .search-box {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    background: var(--surface2);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 8px 14px;
+    font-size: 0.85rem;
+    color: var(--muted);
+  }
+
+  .search-box input {
+    background: none;
+    border: none;
+    outline: none;
+    color: var(--text);
+    font-family: 'Sarabun', sans-serif;
+    font-size: 0.85rem;
+    width: 180px;
+  }
+
+  .search-box input::placeholder { color: var(--muted); }
+
+  table {
+    width: 100%;
+    border-collapse: collapse;
+  }
+
+  thead th {
+    padding: 12px 20px;
+    text-align: left;
+    font-size: 0.75rem;
+    color: var(--muted);
+    text-transform: uppercase;
+    letter-spacing: 0.8px;
+    background: var(--surface2);
+    font-weight: 500;
+  }
+
+  tbody tr {
+    border-bottom: 1px solid rgba(30,58,95,0.5);
+    transition: background 0.15s;
+  }
+
+  tbody tr:hover { background: var(--surface2); }
+  tbody tr:last-child { border-bottom: none; }
+
+  tbody td {
+    padding: 14px 20px;
+    font-size: 0.88rem;
+  }
+
+  .order-id {
+    font-family: 'Space Mono', monospace;
+    font-size: 0.78rem;
+    color: var(--accent);
+  }
+
+  .status-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 5px;
+    padding: 4px 10px;
+    border-radius: 20px;
+    font-size: 0.75rem;
+    font-weight: 500;
+  }
+
+  .status-badge.completed { background: rgba(16,185,129,0.15); color: var(--accent3); }
+  .status-badge.pending { background: rgba(245,158,11,0.15); color: var(--gold); }
+  .status-badge.cancelled { background: rgba(239,68,68,0.15); color: var(--danger); }
+
+  .amount-cell { font-family: 'Space Mono', monospace; font-size: 0.85rem; }
+
+  /* Sheet Integration Banner */
+  .sheet-banner {
+    background: linear-gradient(135deg, rgba(0,212,255,0.08), rgba(124,58,237,0.08));
+    border: 1px solid var(--border);
+    border-radius: 16px;
+    padding: 20px 24px;
+    margin-bottom: 24px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 16px;
+  }
+
+  .sheet-banner-text h3 {
+    font-size: 0.95rem;
+    color: var(--accent);
+    margin-bottom: 4px;
+  }
+
+  .sheet-banner-text p {
+    font-size: 0.82rem;
+    color: var(--muted);
+    line-height: 1.5;
+  }
+
+  .sheet-banner-text code {
+    font-family: 'Space Mono', monospace;
+    background: var(--surface2);
+    padding: 2px 8px;
+    border-radius: 4px;
+    font-size: 0.78rem;
+    color: var(--gold);
+  }
+
+  .connect-btn {
+    flex-shrink: 0;
+    background: linear-gradient(135deg, var(--accent), var(--accent2));
+    border: none;
+    border-radius: 10px;
+    padding: 12px 24px;
+    color: #fff;
+    font-family: 'Sarabun', sans-serif;
+    font-size: 0.9rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: opacity 0.2s, transform 0.2s;
+  }
+
+  .connect-btn:hover { opacity: 0.9; transform: translateY(-1px); }
+
+  /* Sheet URL Modal */
+  .modal-overlay {
+    display: none;
+    position: fixed;
+    inset: 0;
+    background: rgba(0,0,0,0.7);
+    z-index: 100;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .modal-overlay.show { display: flex; }
+
+  .modal {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 20px;
+    padding: 32px;
+    width: 480px;
+    animation: fadeInUp 0.3s ease;
+  }
+
+  .modal h3 { font-size: 1.1rem; margin-bottom: 8px; }
+  .modal p { font-size: 0.85rem; color: var(--muted); margin-bottom: 20px; line-height: 1.6; }
+
+  .steps {
+    background: var(--surface2);
+    border-radius: 10px;
+    padding: 16px;
+    margin-bottom: 20px;
+    font-size: 0.82rem;
+    color: var(--muted);
+    line-height: 2;
+  }
+
+  .steps b { color: var(--accent); }
+
+  .input-group { margin-bottom: 16px; }
+  .input-group label { display: block; font-size: 0.82rem; color: var(--muted); margin-bottom: 6px; }
+
+  .input-group input {
+    width: 100%;
+    background: var(--surface2);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 10px 14px;
+    color: var(--text);
+    font-family: 'Space Mono', monospace;
+    font-size: 0.8rem;
+    outline: none;
+    transition: border-color 0.2s;
+  }
+
+  .input-group input:focus { border-color: var(--accent); }
+
+  .modal-actions {
+    display: flex;
+    gap: 10px;
+    justify-content: flex-end;
+    margin-top: 20px;
+  }
+
+  .btn-secondary {
+    padding: 10px 20px;
+    background: var(--surface2);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    color: var(--muted);
+    font-family: 'Sarabun', sans-serif;
+    cursor: pointer;
+  }
+
+  .btn-primary {
+    padding: 10px 20px;
+    background: var(--accent);
+    border: none;
+    border-radius: 8px;
+    color: #000;
+    font-family: 'Sarabun', sans-serif;
+    font-weight: 600;
+    cursor: pointer;
+  }
+
+  .refresh-btn {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    background: var(--surface2);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 8px 14px;
+    color: var(--muted);
+    font-family: 'Sarabun', sans-serif;
+    font-size: 0.82rem;
+    cursor: pointer;
+    transition: all 0.2s;
+  }
+
+  .refresh-btn:hover { border-color: var(--accent3); color: var(--accent3); }
+
+  @media (max-width: 1100px) {
+    .kpi-grid { grid-template-columns: repeat(2, 1fr); }
+    .charts-grid { grid-template-columns: 1fr; }
+  }
+
+  @media (max-width: 640px) {
+    .kpi-grid { grid-template-columns: 1fr; }
+    header { flex-wrap: wrap; gap: 12px; }
+    .header-right { flex-wrap: wrap; }
+  }
+</style>
+</head>
+<body>
+
+<!-- ===== LOGIN PAGE ===== -->
+<div id="login-page">
+  <div class="login-box">
+    <div class="login-logo">
+      <div class="login-logo-icon">📊</div>
+      <div class="login-title">Sales<span>Board</span></div>
+      <div class="login-subtitle">กรุณาเข้าสู่ระบบเพื่อดู Dashboard</div>
+    </div>
+    <div class="login-error" id="loginError">
+      ⚠️ <span id="loginErrorMsg">Username หรือ Password ไม่ถูกต้อง</span>
+    </div>
+    <div class="login-field">
+      <label>USERNAME</label>
+      <div class="login-input-wrap">
+        <span class="field-icon">👤</span>
+        <input type="text" id="inputUser" placeholder="กรอก Username" autocomplete="username" onkeydown="if(event.key==='Enter')document.getElementById('inputPass').focus()">
+      </div>
+    </div>
+    <div class="login-field">
+      <label>PASSWORD</label>
+      <div class="login-input-wrap">
+        <span class="field-icon">🔒</span>
+        <input type="password" id="inputPass" placeholder="กรอก Password" autocomplete="current-password" onkeydown="if(event.key==='Enter')doLogin()">
+        <button class="toggle-pass" onclick="togglePass()" id="togglePassBtn" type="button">👁</button>
+      </div>
+    </div>
+    <button class="login-btn" id="loginBtn" onclick="doLogin()">เข้าสู่ระบบ</button>
+    <div class="login-footer">Sales Dashboard v1.0 · Secured Access</div>
+  </div>
+</div>
+
+<!-- ===== DASHBOARD PAGE ===== -->
+<div id="dashboard-page" style="display:none">
+
+<div class="container">
+
+  <!-- Header -->
+  <header>
+    <div class="logo">
+      <div class="logo-icon">📊</div>
+      <div>
+        <h1>Sales<span>Board</span></h1>
+        <div style="font-size:0.75rem; color:var(--muted);">ระบบติดตามยอดขาย</div>
+      </div>
+    </div>
+    <div class="header-right">
+      <div class="data-source-badge" id="currentUserLabel" style="cursor:default">👤 </div>
+      <div class="data-source-badge" onclick="openModal()">
+        <div class="dot" id="statusDot"></div>
+        <span id="sourceLabel">📄 Demo Data</span>
+      </div>
+      <button class="refresh-btn" onclick="refreshData()">
+        <span id="refreshIcon">↻</span> รีเฟรช
+      </button>
+      <button class="refresh-btn" onclick="doLogout()" style="border-color:#ef4444;color:#ef4444" onmouseover="this.style.background='rgba(239,68,68,0.1)'" onmouseout="this.style.background=''">
+        🚪 ออกจากระบบ
+      </button>
+      <div class="date-filter">
+        <button class="filter-btn active" onclick="setFilter(this,'7d')">7 วัน</button>
+        <button class="filter-btn" onclick="setFilter(this,'30d')">30 วัน</button>
+        <button class="filter-btn" onclick="setFilter(this,'90d')">3 เดือน</button>
+      </div>
+    </div>
+  </header>
+
+  <!-- Google Sheet Banner -->
+  <div class="sheet-banner">
+    <div class="sheet-banner-text">
+      <h3>🔗 เชื่อมต่อกับ Google Sheet ของคุณ</h3>
+      <p>
+        ขั้นตอน: เปิด Google Sheet → <code>File</code> → <code>Share</code> → <code>Publish to web</code> → เลือก <code>CSV</code> → Copy Link แล้วกดปุ่มด้านขวา
+        <br>รองรับ Column: <code>วันที่</code>, <code>สินค้า</code>, <code>จำนวน</code>, <code>ราคา</code>, <code>รวม</code>, <code>สถานะ</code>
+      </p>
+    </div>
+    <button class="connect-btn" onclick="openModal()">เชื่อมต่อ Google Sheet →</button>
+  </div>
+
+  <!-- KPI Cards -->
+  <div class="kpi-grid">
+    <div class="kpi-card blue">
+      <div class="kpi-icon">💰</div>
+      <div class="kpi-label">รายได้รวม</div>
+      <div class="kpi-value" id="kpi-revenue">฿0</div>
+      <div class="kpi-change up" id="kpi-revenue-change">↑ 0%</div>
+    </div>
+    <div class="kpi-card green">
+      <div class="kpi-icon">📦</div>
+      <div class="kpi-label">ออเดอร์ทั้งหมด</div>
+      <div class="kpi-value" id="kpi-orders">0</div>
+      <div class="kpi-change up" id="kpi-orders-change">↑ 0%</div>
+    </div>
+    <div class="kpi-card purple">
+      <div class="kpi-icon">🛒</div>
+      <div class="kpi-label">มูลค่าเฉลี่ย/ออเดอร์</div>
+      <div class="kpi-value" id="kpi-avg">฿0</div>
+      <div class="kpi-change up" id="kpi-avg-change">↑ 0%</div>
+    </div>
+    <div class="kpi-card gold">
+      <div class="kpi-icon">✅</div>
+      <div class="kpi-label">อัตราสำเร็จ</div>
+      <div class="kpi-value" id="kpi-rate">0%</div>
+      <div class="kpi-change up" id="kpi-rate-change">↑ 0%</div>
+    </div>
+  </div>
+
+  <!-- Charts -->
+  <div class="charts-grid">
+    <div class="chart-card">
+      <div class="chart-header">
+        <div>
+          <div class="chart-title">ยอดขายรายวัน</div>
+          <div class="chart-subtitle">เปรียบเทียบยอดขายและจำนวนออเดอร์</div>
+        </div>
+        <div class="legend">
+          <div class="legend-item"><div class="legend-dot" style="background:var(--accent)"></div> ยอดขาย</div>
+          <div class="legend-item"><div class="legend-dot" style="background:var(--accent2)"></div> ออเดอร์</div>
+        </div>
+      </div>
+      <canvas id="salesChart"></canvas>
+    </div>
+    <div class="chart-card">
+      <div class="chart-header">
+        <div>
+          <div class="chart-title">สินค้าขายดี</div>
+          <div class="chart-subtitle">แบ่งตามหมวดหมู่</div>
+        </div>
+      </div>
+      <canvas id="productChart"></canvas>
+    </div>
+  </div>
+
+  <!-- Table -->
+  <div class="table-card">
+    <div class="table-header">
+      <div>
+        <div class="chart-title">รายการขายล่าสุด</div>
+        <div class="chart-subtitle" id="tableCount">แสดงทั้งหมด</div>
+      </div>
+      <div class="search-box">
+        🔍 <input type="text" id="searchInput" placeholder="ค้นหาสินค้า, ออเดอร์..." oninput="filterTable()">
+      </div>
+    </div>
+    <table>
+      <thead>
+        <tr>
+          <th>Order ID</th>
+          <th>วันที่</th>
+          <th>สินค้า</th>
+          <th>จำนวน</th>
+          <th>ราคา/ชิ้น</th>
+          <th>รวม</th>
+          <th>สถานะ</th>
+        </tr>
+      </thead>
+      <tbody id="salesTable"></tbody>
+    </table>
+  </div>
+
+</div>
+
+<!-- Modal -->
+<div class="modal-overlay" id="modal">
+  <div class="modal">
+    <h3>🔗 เชื่อมต่อ Google Sheet</h3>
+    <p>วิธี Export Google Sheet เป็น CSV URL:</p>
+    <div class="steps">
+      <b>1.</b> เปิด Google Sheet ของคุณ<br>
+      <b>2.</b> คลิก <b>File → Share → Publish to web</b><br>
+      <b>3.</b> เลือก Sheet และเปลี่ยนเป็น <b>Comma-separated values (.csv)</b><br>
+      <b>4.</b> กด <b>Publish</b> แล้ว Copy link ที่ได้<br>
+      <b>5.</b> วาง URL ด้านล่างแล้วกด "โหลดข้อมูล"
+    </div>
+    <div class="steps" style="margin-bottom:16px">
+      <b>📋 Column ที่รองรับ (ชื่อ Header ใน Row 1):</b><br>
+      <code>date</code> หรือ <code>วันที่</code> · <code>product</code> หรือ <code>สินค้า</code><br>
+      <code>quantity</code> หรือ <code>จำนวน</code> · <code>price</code> หรือ <code>ราคา</code><br>
+      <code>total</code> หรือ <code>รวม</code> · <code>status</code> หรือ <code>สถานะ</code>
+    </div>
+    <div class="input-group">
+      <label>CSV URL จาก Google Sheet</label>
+      <input type="text" id="sheetUrl" placeholder="https://docs.google.com/spreadsheets/d/.../pub?output=csv">
+    </div>
+    <div class="modal-actions">
+      <button class="btn-secondary" onclick="closeModal()">ยกเลิก</button>
+      <button class="btn-primary" onclick="loadFromSheet()">📥 โหลดข้อมูล</button>
+    </div>
+  </div>
+</div>
+
+<script>
+// ===== DEMO DATA =====
+const DEMO_DATA = [
+  {date:'2025-02-01',product:'MacBook Pro',quantity:2,price:65000,total:130000,status:'completed'},
+  {date:'2025-02-01',product:'iPhone 15',quantity:5,price:35000,total:175000,status:'completed'},
+  {date:'2025-02-02',product:'iPad Air',quantity:3,price:22000,total:66000,status:'completed'},
+  {date:'2025-02-02',product:'AirPods Pro',quantity:8,price:8500,total:68000,status:'completed'},
+  {date:'2025-02-03',product:'MacBook Air',quantity:1,price:42000,total:42000,status:'pending'},
+  {date:'2025-02-03',product:'iPhone 15',quantity:4,price:35000,total:140000,status:'completed'},
+  {date:'2025-02-04',product:'Apple Watch',quantity:6,price:15000,total:90000,status:'completed'},
+  {date:'2025-02-04',product:'iPad Pro',quantity:2,price:38000,total:76000,status:'cancelled'},
+  {date:'2025-02-05',product:'AirPods',quantity:10,price:6000,total:60000,status:'completed'},
+  {date:'2025-02-05',product:'MacBook Pro',quantity:1,price:65000,total:65000,status:'completed'},
+  {date:'2025-02-06',product:'iPhone 15 Pro',quantity:3,price:45000,total:135000,status:'pending'},
+  {date:'2025-02-06',product:'iPad Air',quantity:4,price:22000,total:88000,status:'completed'},
+  {date:'2025-02-07',product:'Apple Watch',quantity:5,price:15000,total:75000,status:'completed'},
+  {date:'2025-02-07',product:'MacBook Air',quantity:2,price:42000,total:84000,status:'completed'},
+  {date:'2025-02-08',product:'iPhone 15',quantity:7,price:35000,total:245000,status:'completed'},
+  {date:'2025-02-08',product:'AirPods Pro',quantity:6,price:8500,total:51000,status:'completed'},
+  {date:'2025-02-09',product:'iPad Pro',quantity:1,price:38000,total:38000,status:'completed'},
+  {date:'2025-02-09',product:'MacBook Pro',quantity:3,price:65000,total:195000,status:'pending'},
+  {date:'2025-02-10',product:'iPhone 15 Pro',quantity:5,price:45000,total:225000,status:'completed'},
+  {date:'2025-02-10',product:'AirPods',quantity:12,price:6000,total:72000,status:'completed'},
+  {date:'2025-02-11',product:'MacBook Air',quantity:2,price:42000,total:84000,status:'completed'},
+  {date:'2025-02-11',product:'Apple Watch',quantity:4,price:15000,total:60000,status:'cancelled'},
+  {date:'2025-02-12',product:'iPad Air',quantity:3,price:22000,total:66000,status:'completed'},
+  {date:'2025-02-12',product:'iPhone 15',quantity:6,price:35000,total:210000,status:'completed'},
+  {date:'2025-02-13',product:'MacBook Pro',quantity:2,price:65000,total:130000,status:'completed'},
+  {date:'2025-02-13',product:'AirPods Pro',quantity:9,price:8500,total:76500,status:'completed'},
+  {date:'2025-02-14',product:'iPhone 15 Pro',quantity:4,price:45000,total:180000,status:'completed'},
+  {date:'2025-02-14',product:'iPad Pro',quantity:2,price:38000,total:76000,status:'pending'},
+];
+
+let allData = [...DEMO_DATA];
+let currentFilter = '7d';
+let lineChart, pieChart;
+
+// ===== UTILS =====
+function fmt(n) {
+  return '฿' + n.toLocaleString('th-TH');
+}
+
+function getFilteredData(days) {
+  if(!days) return allData;
+  const cutoff = new Date();
+  cutoff.setDate(cutoff.getDate() - parseInt(days));
+  // For demo, use last N unique dates
+  const dates = [...new Set(allData.map(d=>d.date))].sort();
+  const sliceCount = days === '7d' ? 7 : days === '30d' ? 30 : 90;
+  const recentDates = new Set(dates.slice(-sliceCount));
+  return allData.filter(d => recentDates.has(d.date));
+}
+
+// ===== KPI =====
+function updateKPIs(data) {
+  const completed = data.filter(d => d.status === 'completed');
+  const total = data.reduce((s,d) => s + d.total, 0);
+  const orders = data.length;
+  const avg = orders ? Math.round(total/orders) : 0;
+  const rate = orders ? Math.round((completed.length/orders)*100) : 0;
+
+  animateNumber('kpi-revenue', total, v => fmt(v));
+  animateNumber('kpi-orders', orders, v => v.toLocaleString());
+  animateNumber('kpi-avg', avg, v => fmt(v));
+  animateNumber('kpi-rate', rate, v => v+'%');
+
+  document.getElementById('kpi-revenue-change').textContent = '↑ 12.4% จากช่วงก่อน';
+  document.getElementById('kpi-orders-change').textContent = '↑ 8.1% จากช่วงก่อน';
+  document.getElementById('kpi-avg-change').textContent = '↑ 3.7% จากช่วงก่อน';
+  document.getElementById('kpi-rate-change').textContent = '↑ 2.1% จากช่วงก่อน';
+}
+
+function animateNumber(id, target, formatter) {
+  const el = document.getElementById(id);
+  const start = 0;
+  const duration = 800;
+  const startTime = performance.now();
+  function update(now) {
+    const progress = Math.min((now - startTime) / duration, 1);
+    const ease = 1 - Math.pow(1 - progress, 3);
+    el.textContent = formatter(Math.round(start + (target - start) * ease));
+    if (progress < 1) requestAnimationFrame(update);
+  }
+  requestAnimationFrame(update);
+}
+
+// ===== CHARTS =====
+function buildLineChart(data) {
+  const byDate = {};
+  data.forEach(d => {
+    if (!byDate[d.date]) byDate[d.date] = {revenue:0, orders:0};
+    byDate[d.date].revenue += d.total;
+    byDate[d.date].orders += 1;
+  });
+  const labels = Object.keys(byDate).sort();
+  const revenues = labels.map(l => byDate[l].revenue);
+  const orders = labels.map(l => byDate[l].orders);
+  const shortLabels = labels.map(l => l.slice(5)); // MM-DD
+
+  if (lineChart) lineChart.destroy();
+
+  lineChart = new Chart(document.getElementById('salesChart'), {
+    type: 'bar',
+    data: {
+      labels: shortLabels,
+      datasets: [
+        {
+          label: 'ยอดขาย (฿)',
+          data: revenues,
+          backgroundColor: 'rgba(0,212,255,0.15)',
+          borderColor: '#00d4ff',
+          borderWidth: 2,
+          borderRadius: 6,
+          yAxisID: 'y',
+        },
+        {
+          label: 'ออเดอร์',
+          data: orders,
+          type: 'line',
+          borderColor: '#7c3aed',
+          borderWidth: 2.5,
+          pointBackgroundColor: '#7c3aed',
+          pointRadius: 4,
+          tension: 0.4,
+          fill: false,
+          yAxisID: 'y1',
+        }
+      ]
+    },
+    options: {
+      responsive: true,
+      interaction: { mode: 'index', intersect: false },
+      plugins: {
+        legend: { display: false },
+        tooltip: {
+          backgroundColor: '#1a2235',
+          borderColor: '#1e3a5f',
+          borderWidth: 1,
+          callbacks: {
+            label: ctx => ctx.datasetIndex === 0 ? ' ยอดขาย: ' + fmt(ctx.parsed.y) : ' ออเดอร์: ' + ctx.parsed.y + ' รายการ'
+          }
+        }
+      },
+      scales: {
+        x: { grid: { color: 'rgba(30,58,95,0.4)' }, ticks: { color: '#64748b', font: { size: 11 } } },
+        y: {
+          type: 'linear', position: 'left',
+          grid: { color: 'rgba(30,58,95,0.4)' },
+          ticks: { color: '#64748b', callback: v => '฿' + (v/1000)+'k', font: { size: 11 } }
+        },
+        y1: {
+          type: 'linear', position: 'right',
+          grid: { drawOnChartArea: false },
+          ticks: { color: '#7c3aed', font: { size: 11 } }
+        }
+      }
+    }
+  });
+}
+
+function buildPieChart(data) {
+  const byProduct = {};
+  data.forEach(d => { byProduct[d.product] = (byProduct[d.product]||0) + d.total; });
+  const sorted = Object.entries(byProduct).sort((a,b)=>b[1]-a[1]).slice(0,6);
+
+  if (pieChart) pieChart.destroy();
+
+  pieChart = new Chart(document.getElementById('productChart'), {
+    type: 'doughnut',
+    data: {
+      labels: sorted.map(s=>s[0]),
+      datasets: [{
+        data: sorted.map(s=>s[1]),
+        backgroundColor: ['#00d4ff','#7c3aed','#10b981','#f59e0b','#ef4444','#06b6d4'],
+        borderColor: '#111827',
+        borderWidth: 3,
+        hoverOffset: 8,
+      }]
+    },
+    options: {
+      responsive: true,
+      plugins: {
+        legend: {
+          position: 'bottom',
+          labels: { color: '#94a3b8', font: { size: 11, family: 'Sarabun' }, padding: 12, boxWidth: 12 }
+        },
+        tooltip: {
+          backgroundColor: '#1a2235',
+          borderColor: '#1e3a5f',
+          borderWidth: 1,
+          callbacks: { label: ctx => ' ' + fmt(ctx.parsed) }
+        }
+      },
+      cutout: '65%',
+    }
+  });
+}
+
+// ===== TABLE =====
+let tableData = [];
+
+function buildTable(data) {
+  tableData = [...data].sort((a,b)=>b.date.localeCompare(a.date));
+  renderTable(tableData);
+}
+
+function renderTable(data) {
+  const tbody = document.getElementById('salesTable');
+  document.getElementById('tableCount').textContent = `แสดง ${data.length} รายการ`;
+  tbody.innerHTML = data.slice(0,50).map((d,i) => {
+    const statusMap = {
+      completed: '<span class="status-badge completed">● สำเร็จ</span>',
+      pending: '<span class="status-badge pending">● รอดำเนินการ</span>',
+      cancelled: '<span class="status-badge cancelled">● ยกเลิก</span>'
+    };
+    return `<tr>
+      <td class="order-id">#${String(10000+i).padStart(5,'0')}</td>
+      <td>${d.date}</td>
+      <td>${d.product}</td>
+      <td style="text-align:center">${d.quantity}</td>
+      <td class="amount-cell">${fmt(d.price)}</td>
+      <td class="amount-cell" style="color:var(--accent3)">${fmt(d.total)}</td>
+      <td>${statusMap[d.status] || d.status}</td>
+    </tr>`;
+  }).join('');
+}
+
+function filterTable() {
+  const q = document.getElementById('searchInput').value.toLowerCase();
+  const filtered = tableData.filter(d =>
+    d.product.toLowerCase().includes(q) || d.status.includes(q) || d.date.includes(q)
+  );
+  renderTable(filtered);
+}
+
+// ===== FILTER =====
+function setFilter(btn, period) {
+  document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
+  btn.classList.add('active');
+  currentFilter = period;
+  render();
+}
+
+function render() {
+  const data = getFilteredData(currentFilter);
+  updateKPIs(data);
+  buildLineChart(data);
+  buildPieChart(data);
+  buildTable(data);
+}
+
+// ===== GOOGLE SHEET LOADER =====
+function openModal() { document.getElementById('modal').classList.add('show'); }
+function closeModal() { document.getElementById('modal').classList.remove('show'); }
+
+document.getElementById('modal').addEventListener('click', function(e) {
+  if (e.target === this) closeModal();
+});
+
+function normalizeKey(key) {
+  const map = {
+    'วันที่':'date','date':'date',
+    'สินค้า':'product','product':'product','สินค้า':'product',
+    'จำนวน':'quantity','quantity':'quantity',
+    'ราคา':'price','price':'price',
+    'รวม':'total','total':'total','ราคารวม':'total',
+    'สถานะ':'status','status':'status'
+  };
+  return map[key.trim().toLowerCase()] || key.trim().toLowerCase();
+}
+
+async function loadFromSheet() {
+  const url = document.getElementById('sheetUrl').value.trim();
+  if (!url) return alert('กรุณาใส่ URL');
+
+  try {
+    const response = await fetch(url);
+    if (!response.ok) throw new Error('โหลดไม่ได้');
+    const text = await response.text();
+    const lines = text.trim().split('\n');
+    const headers = lines[0].split(',').map(h => normalizeKey(h.replace(/"/g,'')));
+
+    allData = lines.slice(1).filter(l=>l.trim()).map(line => {
+      const vals = line.split(',').map(v=>v.replace(/"/g,'').trim());
+      const obj = {};
+      headers.forEach((h,i) => {
+        const v = vals[i] || '';
+        if (h === 'quantity' || h === 'price' || h === 'total') obj[h] = parseFloat(v)||0;
+        else obj[h] = v;
+      });
+      if (!obj.total && obj.price && obj.quantity) obj.total = obj.price * obj.quantity;
+      return obj;
+    });
+
+    document.getElementById('sourceLabel').textContent = '🔗 Google Sheet';
+    document.getElementById('statusDot').style.background = '#10b981';
+    closeModal();
+    render();
+    alert(`✅ โหลดสำเร็จ! ${allData.length} รายการ`);
+  } catch(e) {
+    alert('❌ โหลดไม่ได้: ' + e.message + '\n\nโปรดตรวจสอบว่า Sheet ถูก Publish to web แล้ว');
+  }
+}
+
+function refreshData() {
+  const icon = document.getElementById('refreshIcon');
+  icon.style.transform = 'rotate(360deg)';
+  icon.style.transition = 'transform 0.5s';
+  setTimeout(() => { icon.style.transform = ''; icon.style.transition = ''; }, 500);
+  render();
+}
+
+// ===== AUTH =====
+// 🔐 แก้ไข Username / Password ได้ที่นี่
+const USERS = [
+  { username: 'Test_1', password: '1234' },
+  { username: 'Test_2', password: '1234' },
+  { username: 'Test_3', password: '1234' },
+];
+
+let currentUser = null;
+
+function doLogin() {
+  const user = document.getElementById('inputUser').value.trim();
+  const pass = document.getElementById('inputPass').value;
+  const err = document.getElementById('loginError');
+  const btn = document.getElementById('loginBtn');
+
+  const match = USERS.find(u => u.username === user && u.password === pass);
+
+  if (!match) {
+    err.classList.add('show');
+    document.getElementById('loginErrorMsg').textContent = 'Username หรือ Password ไม่ถูกต้อง';
+    document.querySelector('.login-box').classList.add('shake');
+    setTimeout(() => document.querySelector('.login-box').classList.remove('shake'), 400);
+    document.getElementById('inputPass').value = '';
+    document.getElementById('inputPass').focus();
+    return;
+  }
+
+  // Login success
+  currentUser = match.username;
+  err.classList.remove('show');
+  btn.textContent = '✓ กำลังเข้าสู่ระบบ...';
+  btn.classList.add('loading');
+
+  setTimeout(() => {
+    document.getElementById('login-page').style.display = 'none';
+    document.getElementById('dashboard-page').style.display = 'block';
+    document.getElementById('currentUserLabel').textContent = '👤 ' + currentUser;
+    render();
+    btn.textContent = 'เข้าสู่ระบบ';
+    btn.classList.remove('loading');
+  }, 600);
+}
+
+function doLogout() {
+  if (!confirm('ต้องการออกจากระบบ?')) return;
+  currentUser = null;
+  document.getElementById('inputUser').value = '';
+  document.getElementById('inputPass').value = '';
+  document.getElementById('dashboard-page').style.display = 'none';
+  document.getElementById('login-page').style.display = 'flex';
+  document.getElementById('inputUser').focus();
+}
+
+function togglePass() {
+  const input = document.getElementById('inputPass');
+  const btn = document.getElementById('togglePassBtn');
+  if (input.type === 'password') { input.type = 'text'; btn.textContent = '🙈'; }
+  else { input.type = 'password'; btn.textContent = '👁'; }
+}
+
+// ===== INIT =====
+// (render() called after login)
+
+</script>
+
+</div><!-- end dashboard-page -->
+</body>
+</html>
