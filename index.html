@@ -1,0 +1,1394 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Pinnacle Engineer — วิศวกรรมไฟฟ้าและเครื่องกล</title>
+<link href="https://fonts.googleapis.com/css2?family=Sarabun:wght@300;400;500;600;700&family=Bebas+Neue&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
+<style>
+:root {
+  --navy: #0a1628;
+  --navy2: #0d2045;
+  --blue: #1a4fa0;
+  --blue2: #2563eb;
+  --sky: #3b82f6;
+  --cyan: #0ea5e9;
+  --white: #ffffff;
+  --off-white: #f0f4ff;
+  --gray: #94a3b8;
+  --light: #e2e8f0;
+  --accent: #f59e0b;
+}
+
+* { margin: 0; padding: 0; box-sizing: border-box; }
+html { scroll-behavior: smooth; }
+
+body {
+  font-family: 'Sarabun', sans-serif;
+  background: var(--white);
+  color: var(--navy);
+  overflow-x: hidden;
+}
+
+/* ===== NAVBAR ===== */
+nav {
+  position: fixed;
+  top: 0; left: 0; right: 0;
+  z-index: 1000;
+  padding: 0 5%;
+  height: 70px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  transition: all 0.3s;
+  background: transparent;
+}
+
+nav.scrolled {
+  background: rgba(10,22,40,0.97);
+  backdrop-filter: blur(12px);
+  box-shadow: 0 2px 30px rgba(0,0,0,0.3);
+}
+
+.nav-logo {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  text-decoration: none;
+}
+
+.nav-logo-icon {
+  width: 38px; height: 38px;
+  background: linear-gradient(135deg, var(--sky), var(--blue2));
+  border-radius: 8px;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 18px;
+}
+
+.nav-logo-text {
+  font-family: 'Bebas Neue', sans-serif;
+  font-size: 1.5rem;
+  color: var(--white);
+  letter-spacing: 1px;
+  line-height: 1;
+}
+
+.nav-logo-sub {
+  font-size: 0.6rem;
+  color: var(--cyan);
+  letter-spacing: 3px;
+  text-transform: uppercase;
+  font-family: 'DM Sans', sans-serif;
+}
+
+.nav-links {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  list-style: none;
+}
+
+.nav-links a {
+  color: rgba(255,255,255,0.8);
+  text-decoration: none;
+  font-size: 0.9rem;
+  padding: 8px 14px;
+  border-radius: 6px;
+  transition: all 0.2s;
+  font-family: 'DM Sans', sans-serif;
+}
+
+.nav-links a:hover { color: var(--white); background: rgba(255,255,255,0.1); }
+
+.nav-cta {
+  background: var(--blue2) !important;
+  color: var(--white) !important;
+  font-weight: 600 !important;
+  padding: 9px 20px !important;
+  border-radius: 8px !important;
+}
+
+.nav-cta:hover { background: var(--sky) !important; }
+
+.hamburger {
+  display: none;
+  flex-direction: column;
+  gap: 5px;
+  cursor: pointer;
+  padding: 4px;
+}
+
+.hamburger span {
+  width: 24px; height: 2px;
+  background: var(--white);
+  border-radius: 2px;
+  transition: all 0.3s;
+}
+
+/* ===== HERO ===== */
+#hero {
+  min-height: 100vh;
+  background: var(--navy);
+  position: relative;
+  display: flex;
+  align-items: center;
+  overflow: hidden;
+}
+
+.hero-bg {
+  position: absolute;
+  inset: 0;
+  background:
+    radial-gradient(ellipse 80% 60% at 70% 40%, rgba(37,99,235,0.25), transparent),
+    radial-gradient(ellipse 50% 50% at 20% 80%, rgba(14,165,233,0.12), transparent);
+}
+
+/* Engineering grid pattern */
+.hero-grid {
+  position: absolute;
+  inset: 0;
+  background-image:
+    linear-gradient(rgba(37,99,235,0.08) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(37,99,235,0.08) 1px, transparent 1px);
+  background-size: 60px 60px;
+}
+
+/* Circuit lines decoration */
+.circuit {
+  position: absolute;
+  right: 0; top: 0;
+  width: 55%;
+  height: 100%;
+  opacity: 0.06;
+}
+
+.hero-content {
+  position: relative;
+  z-index: 2;
+  padding: 0 5%;
+  max-width: 700px;
+  animation: heroIn 1s ease forwards;
+}
+
+@keyframes heroIn {
+  from { opacity: 0; transform: translateY(40px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+.hero-tag {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  background: rgba(37,99,235,0.2);
+  border: 1px solid rgba(59,130,246,0.4);
+  border-radius: 20px;
+  padding: 6px 16px;
+  font-size: 0.8rem;
+  color: var(--sky);
+  font-family: 'DM Sans', sans-serif;
+  letter-spacing: 1px;
+  text-transform: uppercase;
+  margin-bottom: 24px;
+}
+
+.hero-tag::before {
+  content: '';
+  width: 6px; height: 6px;
+  border-radius: 50%;
+  background: var(--cyan);
+  animation: pulse 2s infinite;
+}
+
+@keyframes pulse { 0%,100%{opacity:1;transform:scale(1)} 50%{opacity:0.5;transform:scale(0.8)} }
+
+.hero-title {
+  font-family: 'Bebas Neue', sans-serif;
+  font-size: clamp(3rem, 7vw, 5.5rem);
+  color: var(--white);
+  line-height: 0.95;
+  margin-bottom: 24px;
+  letter-spacing: 1px;
+}
+
+.hero-title .highlight {
+  color: transparent;
+  -webkit-text-stroke: 2px var(--sky);
+}
+
+.hero-desc {
+  font-size: 1.1rem;
+  color: rgba(255,255,255,0.65);
+  line-height: 1.8;
+  margin-bottom: 40px;
+  max-width: 560px;
+  font-family: 'DM Sans', sans-serif;
+}
+
+.hero-btns {
+  display: flex;
+  gap: 14px;
+  flex-wrap: wrap;
+}
+
+.btn-primary {
+  background: var(--blue2);
+  color: var(--white);
+  padding: 14px 32px;
+  border-radius: 10px;
+  text-decoration: none;
+  font-weight: 600;
+  font-size: 0.95rem;
+  transition: all 0.2s;
+  border: 2px solid var(--blue2);
+  font-family: 'DM Sans', sans-serif;
+}
+
+.btn-primary:hover {
+  background: var(--sky);
+  border-color: var(--sky);
+  transform: translateY(-2px);
+  box-shadow: 0 8px 24px rgba(37,99,235,0.4);
+}
+
+.btn-outline {
+  background: transparent;
+  color: var(--white);
+  padding: 14px 32px;
+  border-radius: 10px;
+  text-decoration: none;
+  font-weight: 600;
+  font-size: 0.95rem;
+  transition: all 0.2s;
+  border: 2px solid rgba(255,255,255,0.3);
+  font-family: 'DM Sans', sans-serif;
+}
+
+.btn-outline:hover {
+  border-color: var(--white);
+  background: rgba(255,255,255,0.08);
+  transform: translateY(-2px);
+}
+
+.hero-stats {
+  position: absolute;
+  bottom: 50px;
+  right: 5%;
+  display: flex;
+  gap: 48px;
+  z-index: 2;
+  animation: heroIn 1s ease 0.3s both;
+}
+
+.stat-item { text-align: center; }
+
+.stat-num {
+  font-family: 'Bebas Neue', sans-serif;
+  font-size: 2.5rem;
+  color: var(--white);
+  line-height: 1;
+}
+
+.stat-num span { color: var(--cyan); }
+
+.stat-label {
+  font-size: 0.75rem;
+  color: rgba(255,255,255,0.5);
+  text-transform: uppercase;
+  letter-spacing: 1.5px;
+  margin-top: 4px;
+  font-family: 'DM Sans', sans-serif;
+}
+
+.scroll-indicator {
+  position: absolute;
+  bottom: 30px;
+  left: 50%;
+  transform: translateX(-50%);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 6px;
+  color: rgba(255,255,255,0.4);
+  font-size: 0.7rem;
+  letter-spacing: 2px;
+  font-family: 'DM Sans', sans-serif;
+  animation: float 2s ease-in-out infinite;
+}
+
+@keyframes float { 0%,100%{transform:translateX(-50%) translateY(0)} 50%{transform:translateX(-50%) translateY(-6px)} }
+
+.scroll-line {
+  width: 1px; height: 40px;
+  background: linear-gradient(var(--sky), transparent);
+}
+
+/* ===== SECTIONS ===== */
+section { padding: 100px 5%; }
+
+.section-tag {
+  display: inline-block;
+  background: rgba(37,99,235,0.08);
+  color: var(--blue2);
+  border: 1px solid rgba(37,99,235,0.2);
+  border-radius: 20px;
+  padding: 5px 16px;
+  font-size: 0.78rem;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+  font-family: 'DM Sans', sans-serif;
+  font-weight: 500;
+  margin-bottom: 14px;
+}
+
+.section-title {
+  font-family: 'Bebas Neue', sans-serif;
+  font-size: clamp(2rem, 4vw, 3rem);
+  color: var(--navy);
+  letter-spacing: 0.5px;
+  margin-bottom: 16px;
+  line-height: 1.1;
+}
+
+.section-desc {
+  font-size: 1rem;
+  color: var(--gray);
+  line-height: 1.8;
+  max-width: 600px;
+  font-family: 'DM Sans', sans-serif;
+}
+
+/* ===== ABOUT ===== */
+#about {
+  background: var(--off-white);
+  position: relative;
+  overflow: hidden;
+}
+
+#about::before {
+  content: '';
+  position: absolute;
+  top: -100px; right: -100px;
+  width: 400px; height: 400px;
+  background: radial-gradient(circle, rgba(37,99,235,0.06), transparent 70%);
+  pointer-events: none;
+}
+
+.about-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 80px;
+  align-items: center;
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+.about-visual {
+  position: relative;
+}
+
+.about-img-wrap {
+  background: linear-gradient(135deg, var(--navy), var(--navy2));
+  border-radius: 20px;
+  padding: 40px;
+  aspect-ratio: 4/3;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+  overflow: hidden;
+}
+
+.about-img-wrap::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background-image:
+    linear-gradient(rgba(37,99,235,0.1) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(37,99,235,0.1) 1px, transparent 1px);
+  background-size: 30px 30px;
+}
+
+.about-icon-big {
+  font-size: 6rem;
+  position: relative;
+  z-index: 1;
+  filter: drop-shadow(0 0 30px rgba(59,130,246,0.5));
+}
+
+.about-badge {
+  position: absolute;
+  bottom: -20px; right: -20px;
+  background: var(--white);
+  border-radius: 14px;
+  padding: 16px 20px;
+  box-shadow: 0 10px 40px rgba(0,0,0,0.12);
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.about-badge-icon { font-size: 1.8rem; }
+.about-badge-text strong { display: block; font-size: 1.2rem; color: var(--navy); font-family: 'Bebas Neue', sans-serif; }
+.about-badge-text span { font-size: 0.75rem; color: var(--gray); }
+
+.about-features {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 14px;
+  margin-top: 28px;
+}
+
+.about-feat {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  font-size: 0.9rem;
+  color: var(--navy);
+  font-family: 'DM Sans', sans-serif;
+}
+
+.feat-dot {
+  width: 8px; height: 8px;
+  border-radius: 50%;
+  background: var(--blue2);
+  flex-shrink: 0;
+}
+
+/* ===== SERVICES ===== */
+#services {
+  background: var(--white);
+  max-width: 1300px;
+  margin: 0 auto;
+  padding: 100px 5%;
+}
+
+.services-header {
+  text-align: center;
+  margin-bottom: 60px;
+}
+
+.services-header .section-desc { margin: 0 auto; }
+
+.services-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 24px;
+}
+
+.service-card {
+  background: var(--white);
+  border: 1px solid #e2e8f0;
+  border-radius: 20px;
+  padding: 36px 30px;
+  position: relative;
+  overflow: hidden;
+  transition: all 0.3s;
+  cursor: default;
+}
+
+.service-card::before {
+  content: '';
+  position: absolute;
+  top: 0; left: 0; right: 0;
+  height: 3px;
+  background: linear-gradient(90deg, var(--blue2), var(--cyan));
+  transform: scaleX(0);
+  transition: transform 0.3s;
+}
+
+.service-card:hover {
+  border-color: rgba(37,99,235,0.3);
+  box-shadow: 0 20px 60px rgba(37,99,235,0.1);
+  transform: translateY(-6px);
+}
+
+.service-card:hover::before { transform: scaleX(1); }
+
+.service-icon {
+  width: 56px; height: 56px;
+  background: linear-gradient(135deg, rgba(37,99,235,0.1), rgba(14,165,233,0.1));
+  border-radius: 14px;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 1.6rem;
+  margin-bottom: 20px;
+  transition: transform 0.3s;
+}
+
+.service-card:hover .service-icon { transform: scale(1.1); }
+
+.service-name {
+  font-size: 1.1rem;
+  font-weight: 700;
+  color: var(--navy);
+  margin-bottom: 12px;
+}
+
+.service-desc {
+  font-size: 0.88rem;
+  color: var(--gray);
+  line-height: 1.7;
+  font-family: 'DM Sans', sans-serif;
+}
+
+.service-tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  margin-top: 18px;
+}
+
+.service-tag {
+  background: var(--off-white);
+  color: var(--blue2);
+  font-size: 0.72rem;
+  padding: 4px 10px;
+  border-radius: 10px;
+  font-family: 'DM Sans', sans-serif;
+  font-weight: 500;
+}
+
+/* ===== NEWS ===== */
+#news {
+  background: var(--off-white);
+  padding: 100px 5%;
+}
+
+.news-inner {
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+.news-header {
+  display: flex;
+  align-items: flex-end;
+  justify-content: space-between;
+  margin-bottom: 48px;
+  flex-wrap: wrap;
+  gap: 20px;
+}
+
+.news-grid {
+  display: grid;
+  grid-template-columns: 1.6fr 1fr 1fr;
+  gap: 24px;
+}
+
+.news-card {
+  background: var(--white);
+  border-radius: 18px;
+  overflow: hidden;
+  transition: all 0.3s;
+  box-shadow: 0 2px 20px rgba(0,0,0,0.04);
+}
+
+.news-card:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 12px 40px rgba(37,99,235,0.12);
+}
+
+.news-img {
+  height: 180px;
+  background: linear-gradient(135deg, var(--navy), var(--blue));
+  display: flex; align-items: center; justify-content: center;
+  font-size: 3rem;
+  position: relative;
+  overflow: hidden;
+}
+
+.news-card.featured .news-img { height: 240px; font-size: 4rem; }
+
+.news-img::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background-image: linear-gradient(rgba(37,99,235,0.08) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(37,99,235,0.08) 1px, transparent 1px);
+  background-size: 20px 20px;
+}
+
+.news-body { padding: 20px 22px 24px; }
+
+.news-cat {
+  display: inline-block;
+  background: rgba(37,99,235,0.08);
+  color: var(--blue2);
+  font-size: 0.7rem;
+  padding: 3px 10px;
+  border-radius: 8px;
+  font-weight: 600;
+  font-family: 'DM Sans', sans-serif;
+  letter-spacing: 0.5px;
+  margin-bottom: 10px;
+  text-transform: uppercase;
+}
+
+.news-title {
+  font-size: 0.95rem;
+  font-weight: 700;
+  color: var(--navy);
+  line-height: 1.5;
+  margin-bottom: 8px;
+}
+
+.news-card.featured .news-title { font-size: 1.15rem; }
+
+.news-date {
+  font-size: 0.78rem;
+  color: var(--gray);
+  font-family: 'DM Sans', sans-serif;
+}
+
+.btn-link {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  color: var(--blue2);
+  text-decoration: none;
+  font-size: 0.88rem;
+  font-weight: 600;
+  font-family: 'DM Sans', sans-serif;
+  transition: gap 0.2s;
+}
+
+.btn-link:hover { gap: 10px; }
+
+/* ===== CONTACT ===== */
+#contact {
+  background: var(--navy);
+  padding: 100px 5%;
+  position: relative;
+  overflow: hidden;
+}
+
+#contact::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background-image:
+    linear-gradient(rgba(37,99,235,0.06) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(37,99,235,0.06) 1px, transparent 1px);
+  background-size: 50px 50px;
+}
+
+.contact-inner {
+  max-width: 1100px;
+  margin: 0 auto;
+  display: grid;
+  grid-template-columns: 1fr 1.2fr;
+  gap: 80px;
+  align-items: start;
+  position: relative;
+  z-index: 1;
+}
+
+.contact-info .section-title { color: var(--white); }
+.contact-info .section-desc { color: rgba(255,255,255,0.55); }
+
+.contact-items {
+  margin-top: 36px;
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.contact-item {
+  display: flex;
+  align-items: flex-start;
+  gap: 14px;
+}
+
+.contact-item-icon {
+  width: 42px; height: 42px;
+  background: rgba(37,99,235,0.2);
+  border: 1px solid rgba(59,130,246,0.3);
+  border-radius: 10px;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 1.1rem;
+  flex-shrink: 0;
+}
+
+.contact-item-text strong {
+  display: block;
+  color: var(--white);
+  font-size: 0.85rem;
+  margin-bottom: 2px;
+}
+
+.contact-item-text span {
+  color: rgba(255,255,255,0.55);
+  font-size: 0.85rem;
+  font-family: 'DM Sans', sans-serif;
+}
+
+/* Contact Form */
+.contact-form {
+  background: rgba(255,255,255,0.04);
+  border: 1px solid rgba(255,255,255,0.1);
+  border-radius: 20px;
+  padding: 36px;
+  backdrop-filter: blur(10px);
+}
+
+.form-row {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 14px;
+}
+
+.form-group {
+  margin-bottom: 16px;
+}
+
+.form-group label {
+  display: block;
+  color: rgba(255,255,255,0.6);
+  font-size: 0.8rem;
+  margin-bottom: 6px;
+  font-family: 'DM Sans', sans-serif;
+  letter-spacing: 0.5px;
+}
+
+.form-group input,
+.form-group select,
+.form-group textarea {
+  width: 100%;
+  background: rgba(255,255,255,0.06);
+  border: 1px solid rgba(255,255,255,0.12);
+  border-radius: 10px;
+  padding: 12px 16px;
+  color: var(--white);
+  font-family: 'Sarabun', sans-serif;
+  font-size: 0.9rem;
+  outline: none;
+  transition: border-color 0.2s, box-shadow 0.2s;
+  appearance: none;
+}
+
+.form-group select option { background: var(--navy2); }
+.form-group textarea { min-height: 110px; resize: vertical; }
+
+.form-group input:focus,
+.form-group select:focus,
+.form-group textarea:focus {
+  border-color: var(--sky);
+  box-shadow: 0 0 0 3px rgba(59,130,246,0.15);
+}
+
+.form-group input::placeholder,
+.form-group textarea::placeholder { color: rgba(255,255,255,0.3); }
+
+.btn-submit {
+  width: 100%;
+  background: linear-gradient(135deg, var(--blue2), var(--sky));
+  border: none;
+  border-radius: 10px;
+  padding: 14px;
+  color: var(--white);
+  font-family: 'Sarabun', sans-serif;
+  font-size: 1rem;
+  font-weight: 700;
+  cursor: pointer;
+  transition: all 0.2s;
+  margin-top: 4px;
+}
+
+.btn-submit:hover {
+  opacity: 0.9;
+  transform: translateY(-2px);
+  box-shadow: 0 8px 24px rgba(37,99,235,0.4);
+}
+
+/* Form success */
+.form-success {
+  display: none;
+  text-align: center;
+  padding: 40px 20px;
+  color: var(--white);
+}
+
+.form-success .check { font-size: 3rem; margin-bottom: 14px; }
+.form-success h3 { font-size: 1.3rem; margin-bottom: 8px; }
+.form-success p { color: rgba(255,255,255,0.55); font-size: 0.9rem; font-family: 'DM Sans', sans-serif; }
+
+/* ===== DASHBOARD CTA ===== */
+#dashboard-cta {
+  background: linear-gradient(135deg, var(--blue2), var(--navy));
+  padding: 80px 5%;
+  text-align: center;
+  position: relative;
+  overflow: hidden;
+}
+
+#dashboard-cta::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background-image:
+    linear-gradient(rgba(255,255,255,0.03) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(255,255,255,0.03) 1px, transparent 1px);
+  background-size: 40px 40px;
+}
+
+.cta-content {
+  position: relative;
+  z-index: 1;
+  max-width: 600px;
+  margin: 0 auto;
+}
+
+.cta-icon { font-size: 3rem; margin-bottom: 16px; }
+
+.cta-content h2 {
+  font-family: 'Bebas Neue', sans-serif;
+  font-size: 2.5rem;
+  color: var(--white);
+  margin-bottom: 12px;
+  letter-spacing: 1px;
+}
+
+.cta-content p {
+  color: rgba(255,255,255,0.65);
+  font-size: 0.95rem;
+  margin-bottom: 28px;
+  font-family: 'DM Sans', sans-serif;
+  line-height: 1.7;
+}
+
+.btn-dashboard {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  background: var(--white);
+  color: var(--blue2);
+  padding: 14px 32px;
+  border-radius: 10px;
+  text-decoration: none;
+  font-weight: 700;
+  font-size: 0.95rem;
+  font-family: 'DM Sans', sans-serif;
+  transition: all 0.2s;
+}
+
+.btn-dashboard:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+}
+
+/* ===== FOOTER ===== */
+footer {
+  background: #060e1c;
+  padding: 50px 5% 30px;
+  color: rgba(255,255,255,0.5);
+}
+
+.footer-inner {
+  max-width: 1200px;
+  margin: 0 auto;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 20px;
+  padding-bottom: 28px;
+  border-bottom: 1px solid rgba(255,255,255,0.08);
+}
+
+.footer-logo { display: flex; align-items: center; gap: 10px; }
+
+.footer-links {
+  display: flex;
+  gap: 24px;
+  list-style: none;
+}
+
+.footer-links a {
+  color: rgba(255,255,255,0.45);
+  text-decoration: none;
+  font-size: 0.85rem;
+  transition: color 0.2s;
+  font-family: 'DM Sans', sans-serif;
+}
+
+.footer-links a:hover { color: var(--sky); }
+
+.footer-copy {
+  max-width: 1200px;
+  margin: 24px auto 0;
+  text-align: center;
+  font-size: 0.78rem;
+  color: rgba(255,255,255,0.25);
+  font-family: 'DM Sans', sans-serif;
+}
+
+/* Mobile menu */
+.mobile-menu {
+  display: none;
+  position: fixed;
+  top: 70px; left: 0; right: 0;
+  background: rgba(10,22,40,0.98);
+  backdrop-filter: blur(12px);
+  padding: 20px 5%;
+  z-index: 999;
+  flex-direction: column;
+  gap: 4px;
+  border-bottom: 1px solid rgba(255,255,255,0.08);
+}
+
+.mobile-menu.open { display: flex; }
+.mobile-menu a {
+  color: rgba(255,255,255,0.8);
+  text-decoration: none;
+  padding: 12px 16px;
+  border-radius: 8px;
+  font-size: 0.95rem;
+  font-family: 'DM Sans', sans-serif;
+}
+.mobile-menu a:hover { background: rgba(255,255,255,0.08); color: var(--white); }
+
+/* ===== ANIMATIONS ===== */
+.reveal {
+  opacity: 0;
+  transform: translateY(30px);
+  transition: opacity 0.7s ease, transform 0.7s ease;
+}
+
+.reveal.visible {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+/* ===== RESPONSIVE ===== */
+@media (max-width: 900px) {
+  .about-grid { grid-template-columns: 1fr; gap: 40px; }
+  .services-grid { grid-template-columns: 1fr 1fr; }
+  .news-grid { grid-template-columns: 1fr 1fr; }
+  .news-card.featured { grid-column: 1/-1; }
+  .contact-inner { grid-template-columns: 1fr; gap: 48px; }
+  .hero-stats { display: none; }
+}
+
+@media (max-width: 640px) {
+  .nav-links { display: none; }
+  .hamburger { display: flex; }
+  .services-grid { grid-template-columns: 1fr; }
+  .news-grid { grid-template-columns: 1fr; }
+  .form-row { grid-template-columns: 1fr; }
+  section { padding: 70px 5%; }
+  .about-features { grid-template-columns: 1fr; }
+}
+</style>
+</head>
+<body>
+
+<!-- NAVBAR -->
+<nav id="navbar">
+  <a href="#" class="nav-logo">
+    <div class="nav-logo-icon">⚡</div>
+    <div>
+      <div class="nav-logo-text">PINNACLE</div>
+      <div class="nav-logo-sub">Engineer</div>
+    </div>
+  </a>
+  <ul class="nav-links">
+    <li><a href="#about">เกี่ยวกับเรา</a></li>
+    <li><a href="#services">บริการ</a></li>
+    <li><a href="#news">ข่าวสาร</a></li>
+    <li><a href="#contact">ติดต่อเรา</a></li>
+    <li><a href="sales-dashboard.html" class="nav-cta">📊 Dashboard</a></li>
+  </ul>
+  <div class="hamburger" onclick="toggleMenu()">
+    <span></span><span></span><span></span>
+  </div>
+</nav>
+
+<!-- Mobile Menu -->
+<div class="mobile-menu" id="mobileMenu">
+  <a href="#about" onclick="toggleMenu()">เกี่ยวกับเรา</a>
+  <a href="#services" onclick="toggleMenu()">บริการ</a>
+  <a href="#news" onclick="toggleMenu()">ข่าวสาร</a>
+  <a href="#contact" onclick="toggleMenu()">ติดต่อเรา</a>
+  <a href="sales-dashboard.html" style="color:#60a5fa;font-weight:600">📊 เข้าสู่ Dashboard</a>
+</div>
+
+<!-- HERO -->
+<section id="hero">
+  <div class="hero-bg"></div>
+  <div class="hero-grid"></div>
+
+  <!-- SVG Circuit decoration -->
+  <svg class="circuit" viewBox="0 0 600 800" fill="none" preserveAspectRatio="xMidYMid slice">
+    <circle cx="300" cy="200" r="150" stroke="white" stroke-width="1"/>
+    <circle cx="300" cy="200" r="100" stroke="white" stroke-width="0.5"/>
+    <circle cx="300" cy="200" r="50" stroke="white" stroke-width="0.5"/>
+    <line x1="300" y1="50" x2="300" y2="0" stroke="white" stroke-width="1"/>
+    <line x1="450" y1="200" x2="600" y2="200" stroke="white" stroke-width="1"/>
+    <line x1="300" y1="350" x2="300" y2="500" stroke="white" stroke-width="1"/>
+    <line x1="150" y1="200" x2="0" y2="200" stroke="white" stroke-width="1"/>
+    <rect x="270" y="170" width="60" height="60" stroke="white" stroke-width="1"/>
+    <circle cx="500" cy="400" r="80" stroke="white" stroke-width="0.5"/>
+    <line x1="500" y1="320" x2="500" y2="200" stroke="white" stroke-width="0.5"/>
+    <line x1="500" y1="480" x2="500" y2="600" stroke="white" stroke-width="0.5"/>
+    <rect x="460" y="370" width="80" height="60" stroke="white" stroke-width="0.5" rx="4"/>
+    <circle cx="100" cy="600" r="60" stroke="white" stroke-width="0.5"/>
+    <line x1="100" y1="540" x2="100" y2="400" stroke="white" stroke-width="0.5"/>
+    <line x1="160" y1="600" x2="300" y2="600" stroke="white" stroke-width="0.5"/>
+  </svg>
+
+  <div class="hero-content">
+    <div class="hero-tag">วิศวกรรมครบวงจร</div>
+    <h1 class="hero-title">
+      PINNACLE<br>
+      <span class="highlight">ENGINEER</span>
+    </h1>
+    <p class="hero-desc">
+      ผู้เชี่ยวชาญด้านวิศวกรรมไฟฟ้าและเครื่องกล พร้อมให้บริการออกแบบ
+      ติดตั้ง และบำรุงรักษาระบบอย่างครบวงจร ด้วยทีมวิศวกรมืออาชีพ
+    </p>
+    <div class="hero-btns">
+      <a href="#services" class="btn-primary">ดูบริการของเรา</a>
+      <a href="#contact" class="btn-outline">ติดต่อเรา</a>
+    </div>
+  </div>
+
+  <div class="hero-stats">
+    <div class="stat-item">
+      <div class="stat-num">15<span>+</span></div>
+      <div class="stat-label">ปีประสบการณ์</div>
+    </div>
+    <div class="stat-item">
+      <div class="stat-num">500<span>+</span></div>
+      <div class="stat-label">โครงการสำเร็จ</div>
+    </div>
+    <div class="stat-item">
+      <div class="stat-num">200<span>+</span></div>
+      <div class="stat-label">ลูกค้าที่ไว้วางใจ</div>
+    </div>
+  </div>
+
+  <div class="scroll-indicator">
+    <div class="scroll-line"></div>
+    SCROLL
+  </div>
+</section>
+
+<!-- ABOUT -->
+<section id="about">
+  <div class="about-grid">
+    <div class="about-visual reveal">
+      <div class="about-img-wrap">
+        <div class="about-icon-big">⚙️</div>
+      </div>
+      <div class="about-badge">
+        <div class="about-badge-icon">🏆</div>
+        <div class="about-badge-text">
+          <strong>ISO 9001</strong>
+          <span>มาตรฐานสากล</span>
+        </div>
+      </div>
+    </div>
+    <div class="about-text reveal">
+      <div class="section-tag">เกี่ยวกับเรา</div>
+      <h2 class="section-title">วิศวกรรมที่คุณ<br>วางใจได้</h2>
+      <p class="section-desc">
+        Pinnacle Engineer ก่อตั้งขึ้นด้วยความมุ่งมั่นที่จะให้บริการด้านวิศวกรรม
+        ไฟฟ้าและเครื่องกลที่มีคุณภาพสูงสุด ด้วยทีมวิศวกรที่มีความเชี่ยวชาญ
+        และประสบการณ์มากกว่า 15 ปี เราพร้อมรับทุกความท้าทายของโครงการ
+      </p>
+      <div class="about-features">
+        <div class="about-feat"><div class="feat-dot"></div>ทีมวิศวกรมืออาชีพ</div>
+        <div class="about-feat"><div class="feat-dot"></div>รับประกันงานทุกโครงการ</div>
+        <div class="about-feat"><div class="feat-dot"></div>ตรงเวลา ตรงงบประมาณ</div>
+        <div class="about-feat"><div class="feat-dot"></div>บริการหลังการขาย 24/7</div>
+        <div class="about-feat"><div class="feat-dot"></div>ใบอนุญาตถูกต้องตามกฎหมาย</div>
+        <div class="about-feat"><div class="feat-dot"></div>เทคโนโลยีทันสมัย</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- SERVICES -->
+<section id="services">
+  <div class="services-header reveal">
+    <div class="section-tag">บริการของเรา</div>
+    <h2 class="section-title">ครอบคลุมทุกงานวิศวกรรม</h2>
+    <p class="section-desc">เราให้บริการด้านวิศวกรรมไฟฟ้าและเครื่องกลแบบครบวงจร ตั้งแต่การออกแบบจนถึงการบำรุงรักษา</p>
+  </div>
+  <div class="services-grid">
+    <div class="service-card reveal">
+      <div class="service-icon">⚡</div>
+      <div class="service-name">ระบบไฟฟ้ากำลัง</div>
+      <p class="service-desc">ออกแบบและติดตั้งระบบไฟฟ้ากำลังสำหรับอาคาร โรงงาน และระบบอุตสาหกรรม ตามมาตรฐาน IEC และ มาตรฐานการไฟฟ้า</p>
+      <div class="service-tags">
+        <span class="service-tag">MDB / DB</span>
+        <span class="service-tag">Transformer</span>
+        <span class="service-tag">Generator</span>
+      </div>
+    </div>
+    <div class="service-card reveal">
+      <div class="service-icon">🏭</div>
+      <div class="service-name">ระบบควบคุมอัตโนมัติ</div>
+      <p class="service-desc">ออกแบบและติดตั้งระบบ PLC, SCADA และ Automation สำหรับกระบวนการผลิตในโรงงานอุตสาหกรรม</p>
+      <div class="service-tags">
+        <span class="service-tag">PLC</span>
+        <span class="service-tag">SCADA</span>
+        <span class="service-tag">HMI</span>
+      </div>
+    </div>
+    <div class="service-card reveal">
+      <div class="service-icon">❄️</div>
+      <div class="service-name">ระบบปรับอากาศ HVAC</div>
+      <p class="service-desc">ออกแบบและติดตั้งระบบปรับอากาศ ระบายอากาศ และควบคุมอุณหภูมิสำหรับอาคารและโรงงาน</p>
+      <div class="service-tags">
+        <span class="service-tag">Chiller</span>
+        <span class="service-tag">AHU</span>
+        <span class="service-tag">FCU</span>
+      </div>
+    </div>
+    <div class="service-card reveal">
+      <div class="service-icon">💡</div>
+      <div class="service-name">ระบบไฟฟ้าแสงสว่าง</div>
+      <p class="service-desc">ออกแบบระบบไฟฟ้าแสงสว่างภายในและภายนอกอาคาร รวมถึงระบบประหยัดพลังงาน LED และ Smart Lighting</p>
+      <div class="service-tags">
+        <span class="service-tag">LED</span>
+        <span class="service-tag">Smart Lighting</span>
+        <span class="service-tag">Emergency</span>
+      </div>
+    </div>
+    <div class="service-card reveal">
+      <div class="service-icon">🔧</div>
+      <div class="service-name">งานซ่อมบำรุงรักษา</div>
+      <p class="service-desc">บริการ Preventive Maintenance และ Corrective Maintenance สำหรับระบบไฟฟ้าและเครื่องกล พร้อมทีมฉุกเฉิน 24 ชั่วโมง</div>
+      <div class="service-tags">
+        <span class="service-tag">PM Service</span>
+        <span class="service-tag">24/7 Support</span>
+        <span class="service-tag">Inspection</span>
+      </div>
+    </div>
+    <div class="service-card reveal">
+      <div class="service-icon">🌱</div>
+      <div class="service-name">ระบบพลังงานทดแทน</div>
+      <p class="service-desc">ออกแบบและติดตั้งระบบโซลาร์เซลล์ Solar Rooftop และระบบพลังงานสะอาดสำหรับอาคารและโรงงาน</p>
+      <div class="service-tags">
+        <span class="service-tag">Solar PV</span>
+        <span class="service-tag">Inverter</span>
+        <span class="service-tag">Battery</span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- NEWS -->
+<section id="news">
+  <div class="news-inner">
+    <div class="news-header reveal">
+      <div>
+        <div class="section-tag">ข่าวสาร</div>
+        <h2 class="section-title">ข่าวสารและบทความ</h2>
+      </div>
+      <a href="#" class="btn-link">ดูทั้งหมด →</a>
+    </div>
+    <div class="news-grid">
+      <div class="news-card featured reveal">
+        <div class="news-img">⚡</div>
+        <div class="news-body">
+          <span class="news-cat">ข่าวบริษัท</span>
+          <div class="news-title">Pinnacle Engineer คว้าโครงการระบบไฟฟ้าโรงงานอุตสาหกรรมมูลค่ากว่า 50 ล้านบาท</div>
+          <div class="news-date">1 มีนาคม 2568</div>
+        </div>
+      </div>
+      <div class="news-card reveal">
+        <div class="news-img" style="height:140px;font-size:2.2rem">🌱</div>
+        <div class="news-body">
+          <span class="news-cat">บทความ</span>
+          <div class="news-title">ทำไมโรงงานควรหันมาใช้ Solar Rooftop ในปี 2568</div>
+          <div class="news-date">15 กุมภาพันธ์ 2568</div>
+        </div>
+      </div>
+      <div class="news-card reveal">
+        <div class="news-img" style="height:140px;font-size:2.2rem">🏆</div>
+        <div class="news-body">
+          <span class="news-cat">รางวัล</span>
+          <div class="news-title">รับรางวัล Best Engineering Company 2024 จากสมาคมวิศวกรรมไทย</div>
+          <div class="news-date">10 มกราคม 2568</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- DASHBOARD CTA -->
+<div id="dashboard-cta">
+  <div class="cta-content reveal">
+    <div class="cta-icon">📊</div>
+    <h2>ระบบ Sales Dashboard</h2>
+    <p>เข้าถึงข้อมูลยอดขายและการวิเคราะห์ธุรกิจแบบ Real-time สำหรับทีมงานภายในองค์กร</p>
+    <a href="sales-dashboard.html" class="btn-dashboard">🔐 เข้าสู่ Dashboard</a>
+  </div>
+</div>
+
+<!-- CONTACT -->
+<section id="contact">
+  <div class="contact-inner">
+    <div class="contact-info reveal">
+      <div class="section-tag" style="background:rgba(59,130,246,0.15);border-color:rgba(59,130,246,0.3);color:#93c5fd">ติดต่อเรา</div>
+      <h2 class="section-title">พร้อมให้คำปรึกษา<br>ฟรี!</h2>
+      <p class="section-desc">ติดต่อทีมวิศวกรของเราเพื่อรับคำปรึกษาและใบเสนอราคาโดยไม่มีค่าใช้จ่าย</p>
+      <div class="contact-items">
+        <div class="contact-item">
+          <div class="contact-item-icon">📍</div>
+          <div class="contact-item-text">
+            <strong>ที่อยู่</strong>
+            <span>123 ถนนวิภาวดีรังสิต แขวงจตุจักร เขตจตุจักร กรุงเทพฯ 10900</span>
+          </div>
+        </div>
+        <div class="contact-item">
+          <div class="contact-item-icon">📞</div>
+          <div class="contact-item-text">
+            <strong>โทรศัพท์</strong>
+            <span>02-xxx-xxxx / 081-xxx-xxxx</span>
+          </div>
+        </div>
+        <div class="contact-item">
+          <div class="contact-item-icon">📧</div>
+          <div class="contact-item-text">
+            <strong>อีเมล</strong>
+            <span>info@pinnacleengineer.co.th</span>
+          </div>
+        </div>
+        <div class="contact-item">
+          <div class="contact-item-icon">🕐</div>
+          <div class="contact-item-text">
+            <strong>เวลาทำการ</strong>
+            <span>จันทร์–ศุกร์ 08:00–17:30 น.</span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="contact-form reveal" id="contactForm">
+      <h3 style="color:var(--white);font-size:1.1rem;margin-bottom:22px;font-family:'DM Sans',sans-serif;font-weight:600">ส่งข้อความถึงเรา</h3>
+      <div class="form-row">
+        <div class="form-group">
+          <label>ชื่อ-นามสกุล</label>
+          <input type="text" placeholder="กรอกชื่อของคุณ">
+        </div>
+        <div class="form-group">
+          <label>เบอร์โทรศัพท์</label>
+          <input type="tel" placeholder="08x-xxx-xxxx">
+        </div>
+      </div>
+      <div class="form-group">
+        <label>อีเมล</label>
+        <input type="email" placeholder="your@email.com">
+      </div>
+      <div class="form-group">
+        <label>ประเภทงาน</label>
+        <select>
+          <option value="">เลือกประเภทงาน</option>
+          <option>ระบบไฟฟ้ากำลัง</option>
+          <option>ระบบควบคุมอัตโนมัติ</option>
+          <option>ระบบ HVAC</option>
+          <option>ระบบแสงสว่าง</option>
+          <option>ซ่อมบำรุงรักษา</option>
+          <option>พลังงานทดแทน</option>
+          <option>อื่นๆ</option>
+        </select>
+      </div>
+      <div class="form-group">
+        <label>รายละเอียด</label>
+        <textarea placeholder="อธิบายโครงการหรือความต้องการของคุณ..."></textarea>
+      </div>
+      <button class="btn-submit" onclick="submitForm()">📨 ส่งข้อความ</button>
+
+      <div class="form-success" id="formSuccess">
+        <div class="check">✅</div>
+        <h3>ส่งข้อความสำเร็จ!</h3>
+        <p>ทีมงานของเราจะติดต่อกลับภายใน 24 ชั่วโมง</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer>
+  <div class="footer-inner">
+    <div class="footer-logo">
+      <div class="nav-logo-icon" style="width:34px;height:34px;font-size:16px">⚡</div>
+      <div>
+        <div style="font-family:'Bebas Neue',sans-serif;font-size:1.2rem;color:rgba(255,255,255,0.8);letter-spacing:1px">PINNACLE ENGINEER</div>
+        <div style="font-size:0.7rem;color:rgba(255,255,255,0.3);letter-spacing:2px;font-family:'DM Sans',sans-serif">ELECTRICAL & MECHANICAL</div>
+      </div>
+    </div>
+    <ul class="footer-links">
+      <li><a href="#about">เกี่ยวกับเรา</a></li>
+      <li><a href="#services">บริการ</a></li>
+      <li><a href="#news">ข่าวสาร</a></li>
+      <li><a href="#contact">ติดต่อเรา</a></li>
+      <li><a href="sales-dashboard.html">Dashboard</a></li>
+    </ul>
+  </div>
+  <div class="footer-copy">© 2568 Pinnacle Engineer Co., Ltd. สงวนลิขสิทธิ์ทุกประการ</div>
+</footer>
+
+<script>
+// Navbar scroll effect
+window.addEventListener('scroll', () => {
+  document.getElementById('navbar').classList.toggle('scrolled', window.scrollY > 40);
+});
+
+// Mobile menu
+function toggleMenu() {
+  document.getElementById('mobileMenu').classList.toggle('open');
+}
+
+// Scroll reveal
+const observer = new IntersectionObserver((entries) => {
+  entries.forEach((e, i) => {
+    if (e.isIntersecting) {
+      setTimeout(() => e.target.classList.add('visible'), i * 80);
+    }
+  });
+}, { threshold: 0.1 });
+
+document.querySelectorAll('.reveal').forEach(el => observer.observe(el));
+
+// Contact form
+function submitForm() {
+  const form = document.getElementById('contactForm');
+  const success = document.getElementById('formSuccess');
+
+  // Simple validation
+  const inputs = form.querySelectorAll('input, textarea, select');
+  let valid = true;
+  inputs.forEach(inp => {
+    if (!inp.value.trim()) { inp.style.borderColor = 'rgba(239,68,68,0.6)'; valid = false; }
+    else inp.style.borderColor = '';
+  });
+
+  if (!valid) return;
+
+  // Show success
+  form.querySelectorAll('.form-row, .form-group, .btn-submit, h3').forEach(el => el.style.display = 'none');
+  success.style.display = 'block';
+
+  // Reset after 5s
+  setTimeout(() => {
+    form.querySelectorAll('.form-row, .form-group, .btn-submit, h3').forEach(el => el.style.display = '');
+    success.style.display = 'none';
+    inputs.forEach(inp => inp.value = '');
+  }, 5000);
+}
+
+// Smooth nav links
+document.querySelectorAll('a[href^="#"]').forEach(a => {
+  a.addEventListener('click', e => {
+    const target = document.querySelector(a.getAttribute('href'));
+    if (target) {
+      e.preventDefault();
+      target.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    }
+  });
+});
+</script>
+</body>
+</html>
